@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <numeric>
+#include <iomanip>
+using namespace std;
+struct student {
+string name;
+vector<double> grades;
+double average;
+};
+double calculateaverage(const vector<double>& grades) {
+if (grades.empty()) return 0.0;
+double sum = accumulate(grades.begin(), grades.end(), 0.0);
+return sum / grades.size();
+}
+int main() {
+vector<student> database;
+int choice;
+cout << "--- school grade management system ---" << endl;
+while (true) {
+cout << "\n1. add student and grades\n2. display all students\n3. exit\n";
+cout << "enter your choice: ";
+cin >> choice;
+if (choice == 3) {
+cout << "exiting program. goodbye!" << endl;
+break;
+}
+if (choice == 1) {
+student newstudent;
+int numgrades;
+cout << "enter student name: ";
+cin.ignore();
+getline(cin, newstudent.name);
+cout << "how many grades do you want to enter for " << newstudent.name << "? ";
+cin >> numgrades;
+for (int i = 0; i < numgrades; ++i) {
+double grade;
+cout << "enter grade " << i + 1 << ": ";
+cin >> grade;
+newstudent.grades.push_back(grade);
+}
+newstudent.average = calculateaverage(newstudent.grades);
+database.push_back(newstudent);
+cout << "student added successfully!" << endl;
+}
+else if (choice == 2) {
+if (database.empty()) {
+cout << "no students in the database yet." << endl;
+} else {
+cout << "\n--- student records ---" << endl;
+for (const auto& student : database) {
+cout << "student: " << student.name << " | grades: ";
+for (double g : student.grades) {
+cout << g << " ";
+}
+cout << " | average: " << fixed << setprecision(2) << student.average << endl;
+}
+}
+}
+else {
+cout << "invalid choice. please try again." << endl;
+}
+}
+return 0;
+}
